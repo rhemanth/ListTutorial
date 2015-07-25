@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -26,8 +28,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.listView);
         list = new ArrayList<String>(Arrays.asList(values));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, final View view, int i, long l) {
+                final String item = (String) adapterView.getItemAtPosition(i);
+                view.animate().setDuration(2000).alpha(0).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        list.remove(item);
+                        adapter.notifyDataSetChanged();
+                        view.setAlpha(1);
+
+                    }
+                });
+
+            }
+
+        });
 
     }
 
